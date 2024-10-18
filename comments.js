@@ -50,4 +50,12 @@ app.get('/comments/keyword/:keyword', (req, res) => {
 });
 
 // Create a route that returns all comments by a specific user that contain a specific keyword
-app.get('/comments/user/:user/keyword/:keyword',
+app.get('/comments/user/:user/keyword/:keyword', (req, res) => {
+  const userKeywordComments = comments.filter(comment => 
+    comment.user === req.params.user && comment.text.includes(req.params.keyword)
+  );
+  if (userKeywordComments.length === 0) {
+    return res.status(404).send('No comments found for the given user and keyword');
+  }
+  res.json(userKeywordComments);
+});
